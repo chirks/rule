@@ -69,7 +69,7 @@ import { getDefaultOpener, setDefaultOpener, OPENER_OPTIONS } from "../manager/D
 import { AppSettings, saveSettings, readSettings } from "../manager/Settings";
 import { SettingsPage } from "./SettingsPage";
 import { MountDirectoriesPage } from "./MountDirectoriesPage";
-import { Bookmark, getAllBookmarks, addDirectoryBookmark, removeBookmark, resolveBookmarkPath, onBookmarksChanged } from "../manager/BookmarkManager";
+import { Bookmark, getAllBookmarks, addDirectoryBookmark, resolveBookmarkPath, onBookmarksChanged } from "../manager/BookmarkManager";
 import { ensureDir, makeTimestamp, importSinglePhotoResult } from "../manager/importHelpers";
 import { DROP_ACCEPTED_TYPES, handleDropToDirectory } from "../manager/dropHandler";
 import { makeDragConfig } from "./FileListItem";
@@ -2288,10 +2288,8 @@ function GeneralBrowser({
       accessible = false;
     }
     if (!accessible) {
-      // 书签失效（软件更新导致）→ 用 ToastOverlay 弹窗提醒重新挂载
+      // 书签失效（软件更新导致）→ 仅提示用户，不自动删除书签，保留以便重新挂载
       showRemountWarning(bookmark.name);
-      removeBookmark(bookmark.name);
-      setBookmarkRefreshKey((k) => k + 1);
       return;
     }
     if (isHomePage && settings && onSettingsChange) {
